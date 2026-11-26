@@ -341,7 +341,8 @@ document.getElementById('waitlist').addEventListener('submit',async e=>{e.preven
     const r=await fetch('https://formsubmit.co/ajax/ahojosias@gmail.com',{method:'POST',
       headers:{'Content-Type':'application/json','Accept':'application/json'},
       body:JSON.stringify({email:f.email.value,_subject:'New Moonshine waitlist sign-up',_template:'table'})});
-    if(!r.ok)throw 0;
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok||String(j.success)!=='true')throw 0;
     msg.textContent='✦ You\'re on the list. We\'ll be in touch soon.';f.reset();
   }catch(_){msg.textContent='Something went wrong. Please try again in a moment.';}
   btn.disabled=false;});
