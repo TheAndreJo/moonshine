@@ -334,18 +334,14 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 const chat=document.getElementById('chat');
 new IntersectionObserver((e,o)=>{if(e[0].isIntersecting){chat.querySelectorAll('.msg').forEach((m,i)=>setTimeout(()=>m.classList.add('show'),400+i*900));o.disconnect()}},{threshold:.3}).observe(chat);
 // form
-document.getElementById('waitlist').addEventListener('submit',async e=>{e.preventDefault();
-  const f=e.target,msg=document.getElementById('formMsg'),btn=f.querySelector('button');
-  btn.disabled=true;msg.textContent='Sending…';
-  try{
-    const r=await fetch('https://formsubmit.co/ajax/ahojosias@gmail.com',{method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({email:f.email.value,_subject:'New Moonshine waitlist sign-up',_template:'table'})});
-    const j=await r.json().catch(()=>({}));
-    if(!r.ok||String(j.success)!=='true')throw 0;
-    msg.textContent='✦ You\'re on the list. We\'ll be in touch soon.';f.reset();
-  }catch(_){msg.textContent='Something went wrong. Please try again in a moment.';}
-  btn.disabled=false;});
+// Waitlist: opens a pre-filled GitHub issue on the site's repo; the visitor clicks "Create".
+document.getElementById('waitlist').addEventListener('submit',e=>{e.preventDefault();
+  const f=e.target,email=f.email.value.trim();
+  const body='**Email:** '+email+'\n**Joined from:** '+location.href+'\n**Date:** '+new Date().toISOString();
+  const url='https://github.com/TheAndreJo/moonshine/issues/new?title='+encodeURIComponent('Waitlist: '+email)+'&body='+encodeURIComponent(body);
+  window.open(url,'_blank','noopener');
+  document.getElementById('formMsg').textContent='✦ Almost there — click "Create" on the GitHub page that just opened to join the list.';
+  f.reset();});
 document.getElementById('yr').textContent=new Date().getFullYear();
 </script>
 </body>
